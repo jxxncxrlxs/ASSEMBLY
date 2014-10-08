@@ -46,18 +46,28 @@
 ; 10h  13h    despliega cadena de caracteres
 ; 10h  1bh    regresa la información de funcionalidad o estado
 ; 10h  1ch    guarda o restaura el estado de vídeo
-; 21h  02h    despliega en pantalla
-; 21h  09h    despliega en pantalla
+; 21h  02h    despliega en pantalla digitos
+; 21h  09h    despliega en pantalla cadenas
 ; 21h  0Ah    entrada desde teclado
 ; 21h  03Fh   entrada desde teclado
 ; 21h  40h    despliega en pantalla
 
-.data 
+.data                                  
+    ; VARIABLES
+    ; DB para Byte.
+    ; DW para Word.       
+    ;
+    ; CONSTANTES
+    ; constante EQU 5
+    ;
+    ; ARRAYS
+    arreglo DB 1,2,3
+        
     ; en este caso se declaran cadenas 
-    cadena db 'hola mundo$'
-    igualdad db 'igualdad$'      
-    diferencia db 'diferencia$'
-    numero db 10d  
+    cadena DB 'hola mundo$'
+    igualdad DB 'igualdad$'      
+    diferencia DB 'diferencia$' 
+    counter DB 0d
     
 .code
     ; imprime un valor numérico de un dígito en base decimal
@@ -81,7 +91,7 @@
         ; otra forma de hacerlo
         ; MOV ah, 09h
         ; LEA dx, parametro
-        ; INT 21h
+        INT 21h
     endm    
     
     ; realiza la suma de dos valores
@@ -231,9 +241,36 @@
         INT 21h
     endm 
     
+    ; ejemplo de como accesar a los valores de un arreglo numero de tres elementos
+    imprimir_arreglo macro parametro  
+        MOV ah, 02h
+        MOV dl, parametro[0] 
+        ADD dl, 48
+        INT 21h           
+        
+        MOV ah, 02h
+        MOV dl, parametro[0] 
+        ADD dl, 48
+        INT 21h  
+        
+        MOV ah, 02h
+        MOV dl, parametro[0] 
+        ADD dl, 48
+        INT 21h  
+    endm     
+    
+    ; este macro lee un carácter de pantalla y lo despliega enseguida
+    macro leer_caracter 
+        MOV al, 00d
+        MOV ah, 01h              ; funcion de lectura, lo leido se almacena en ah
+        INT 21h                  ; ejecuta la función de lectura                  
+        MOV ah, 02h              ; pasa a ah la función de despliegue en pantalla
+        MOV dl, al               ; 02h imprime lo que esté almacenado en DX
+        INT 21h                  ; interrupcion que ejecuta la funcion de imprimir 
+    endm                   ;
+    
 .startup     
     ; aqui ponga la funcion que quiere utilizar
     ; los macros se llaman:
     ; nombre_macro parametro_uno [,OTRO_PARAMETRO...] 
-   
 end             
