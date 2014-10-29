@@ -81,8 +81,18 @@
     ; ejercicio 05
     ; variable numéricas
     ej_05_auxiliar_01 DB 0
-    ej_05_auxiliar_02 DB 0
-               
+    ej_05_auxiliar_02 DB 0     
+    
+    ; ejercicio 06      
+    ej_06_mensaje_01 DB "INGRESE UNA CADENA $", 13, 10, "$"
+    ej_06_mensaje_02 DB 13,10,"ES UN PALINDROMO $"
+    ej_06_mensaje_03 DB "NO ES UN PALINDROMO $"
+    ; variable numéricas
+    ej_06_cadena_01 DB 20 dup('$')
+    ej_06_cadena_02 DB 20 dup('$')
+    ej_06_contador_01 DW 0 
+    ej_06_contador_02 DW 0
+                
     ; ejercicio 07
     ; cadenas
     ej_07_mensaje_01 DB "INGRESE UNA CADENA $", 13, 10, "$"
@@ -148,6 +158,25 @@
         INT 21h                       ; ejecuta la funcion anterior
     endm                                              
     
+    ; macro para saber la longitud de una cadena
+    macro mc_generico_contar_caracteres cadena, contador
+        LOCAL CONTAR, PARAR, SEGUIR
+        MOV si, 00h                            
+        CONTAR:  
+            MOV al, cadena[si]
+            CMP cadena[si], "$"
+            JE  PARAR
+            JNE SEGUIR
+            
+        SEGUIR: 
+            INC si
+            JMP CONTAR
+            
+        PARAR:                
+            DEC si ; quita eol
+            MOV contador, si  
+    endm   
+
     ; macro para leer cifras de dos dígitos, primero lee las decenas, luego las unidades
     mc_generico_leer_cifra macro parametro
         LOCAL DECENA, UNIDAD
@@ -263,7 +292,57 @@
         mc_generico_imprimir_mensaje punto 
         mc_generico_imprimir_digito ej_05_auxiliar_02
     endm
+    
+    ; ejercicio 06 - verifica si dos cadenas ingresadas son palíndromos
+    ; aclaración: solo acepta palabras de 20 caractéres como máximo
+    macro mc_ej_06                             
+        LOCAL RECORRER, CONTINUAR, SI_ES, NO_ES
         
+        MOV ej_06_cadena_01, 2EH
+        MOV ej_06_cadena_02, 2EH
+        
+        mc_generico_imprimir_mensaje ej_06_mensaje_01
+        mc_generico_leer_cadena ej_06_cadena_01 
+        mc_limpiar_pantalla   
+        mc_generico_imprimir_mensaje ej_06_mensaje_01
+        mc_generico_leer_cadena ej_06_cadena_02
+    
+        mc_generico_contar_caracteres ej_06_cadena_01, ej_06_contador_01
+        mc_generico_contar_caracteres ej_06_cadena_02, ej_06_contador_02
+        mc_limpiar_pantalla
+                                    
+        MOV ax, ej_06_contador_01 
+        MOV bx, ej_06_contador_02
+        CMP ax, bx
+        JNE NO_ES     
+        MOV si, 0
+        MOV di, ej_06_contador_01 
+        dec di 
+
+        RECORRER:  
+            CMP di, 0
+            JAE CONTINUAR
+            JB  SI_ES
+             
+        CONTINUAR: 
+            MOV al, ej_06_cadena_01[si] 
+            CMP al, ej_06_cadena_02[di]
+            JNE NO_ES 
+            DEC di
+            INC si
+            JE  RECORRER     
+                                           
+        SI_ES:
+            mov bl, 1
+            mc_generico_imprimir_mensaje ej_06_mensaje_02
+            .exit
+            
+        NO_ES:        
+            mov bl, 0
+            mc_generico_imprimir_mensaje ej_06_mensaje_03
+            .exit
+    endm
+            
     ; ejercicio 07 - compara dos cadenas que ingresan por teclado e informa si son iguales o diferentes
     macro mc_ej_07                  
         mc_generico_imprimir_mensaje ej_07_mensaje_01
@@ -299,7 +378,7 @@
             mc_generico_imprimir_mensaje ej_07_mensaje_04
             .exit
     endm
-     
+    
     ; ejercicio 09 - lee carácteres hasta que se presione la tecla ESC
     macro mc_ej_09
         mc_generico_imprimir_mensaje ej_09_mensaje_01
@@ -323,7 +402,8 @@
     ;mc_ej_02  
     ;mc_ej_03  
     ;mc_ej_04
-    ;mc_ej_05  
-    ;mc_ej_07
-    ;mc_ej_09
+    ;mc_ej_05
+    ;mc_ej_06  
+    ;mc_ej_07     
+    ;mc_ej_09                
 end
