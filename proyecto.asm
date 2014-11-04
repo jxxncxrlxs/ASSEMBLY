@@ -2,7 +2,7 @@
 ; CURSO ORGANIZACIÓN DE ESTRUCTURAS
 ; REALIZADO POR ESTUDIANTES UNIVERSIDAD AMERICANA
 ; III CUATRIMESTRE - 2014
-; IR A LA LINEA NÚMERO 55 PARA OMITIR ESTA INFORMACIÓN CON FINES PEDAGÓGICOS.
+; IR A LA LINEA NÚMERO 50 PARA OMITIR ESTA INFORMACIÓN CON FINES PEDAGÓGICOS.
 ; MODELOS DE MEMORIA
 ; Model TINY CS = DS En 1 solo segmento de 64K
 ; Model SMALL CS = 64Kb DS = 64Kb
@@ -46,6 +46,7 @@
 ; 21h 0Ah entrada desde teclado
 ; 21h 03Fh entrada desde teclado
 ; 21h 40h despliega en pantalla
+
 .model compact
 .stack 64
 .data                                                                                             
@@ -53,7 +54,7 @@
     menu_cadena_02 DB "·                    INGENIERIA EN SISTEMAS DE INFORMACION                     ·",13,10,"$"
     menu_cadena_03 DB "·                         ORGANIZACION DE ESTRUCTURAS                          ·",13,10,"$"
     menu_cadena_04 DB "·                            III CUATRIMESTRE 2014                             ·",13,10,"$"
-    menu_cadena_05 DB "·                                 PROGRAMADORES                                ·",13,10,"$"
+    menu_cadena_05 DB "·                                 PROGRAMADOR                                  ·",13,10,"$"
     menu_cadena_06 DB "·KAREN         JOSEPH        JAIRO          GUILLERMO         JUAN             ·",13,10,"$"
     menu_cadena_07 DB "················································································",13,10,"$"
     menu_cadena_08 DB "· [A] HOLA MUNDO     [B] SUMA            [C] RESTA          [D] MULTIPLICACION ·",13,10,"$"
@@ -62,33 +63,53 @@
     menu_cadena_11 DB "················································································",13,10,"$"
     menu_cadena_12 DB "> INGRESE UNA OPCION: $"
     
+    menu_cadena_13 DB "················································································",13,10,"$"
+    menu_cadena_14 DB "·                                                                              ·",13,10,"$"
+    menu_cadena_15 DB "·                                                                              ·",13,10,"$"
+    menu_cadena_16 DB "·            _/_/        _/_/_/        _/_/_/        _/_/          _/_/_/      ·",13,10,"$"
+    menu_cadena_17 DB "·         _/    _/      _/    _/        _/        _/    _/      _/             ·",13,10,"$"
+    menu_cadena_18 DB "·        _/_/_/_/      _/    _/        _/        _/    _/        _/_/          ·",13,10,"$"
+    menu_cadena_19 DB "·       _/    _/      _/    _/        _/        _/    _/            _/         ·",13,10,"$"
+    menu_cadena_20 DB "·      _/    _/      _/_/_/        _/_/_/        _/_/        _/_/_/            ·",13,10,"$"
+    menu_cadena_21 DB "·                                                                              ·",13,10,"$"
+    menu_cadena_22 DB "·                                                                              ·",13,10,"$"         
+    menu_cadena_23 DB "················································································",13,10,"$"
+    
     ; ejercicio 01
     ; cadenas
     ej_01_mensaje_01 DB "¡HOLA MUNDO!", 13, 10, "$"
     ; ejercicio 02
     ; cadenas
-    ej_02_mensaje_01 DB "INGRESE EL PRIMER VALOR DE DOS DIGITOS $"
-    ej_02_mensaje_02 DB 13,10,"INGRESE EL SEGUNDO VALOR DE DOS DIGITOS $"
-    ej_02_mensaje_03 DB 13,10,"RESULTADO: $"
+    ej_02_mensaje_01 DB       "VALOR 1 (12)    $"
+    ej_02_mensaje_02 DB 13,10,"VALOR 2 (34)    $"
+    ej_02_mensaje_03 DB 13,10,"             + ____$"
+    ej_02_mensaje_04 DB 13,10,"TOTAL           $"
     ; variable numéricas
     ej_02_auxiliar_01 DB 0
     ej_02_auxiliar_02 DB 0
-    ; ejercicio 03
+    ; ejercicio 03 
+    ; cadenas 
+    ej_03_mensaje_01 DB 13,10,"             - ____$"
     ; variables numéricas
     ej_03_auxiliar_01 DB 0
     ej_03_auxiliar_02 DB 0
-    ; ejercicio 04
+    ; ejercicio 04        
+    ; cadenas 
+    ej_04_mensaje_01 DB 13,10,"             x ____$"
     ; variables numéricas
     ej_04_auxiliar_01 DB 0
     ej_04_auxiliar_02 DB 0
     ; ejercicio 05
+    ; cadenas 
+    ej_05_mensaje_01 DB 13,10,"             ÷ ____$"
     ; variable numéricas
     ej_05_auxiliar_01 DB 0
     ej_05_auxiliar_02 DB 0
     ; ejercicio 06
-    ej_06_mensaje_01 DB "INGRESE UNA CADENA $", 13, 10, "$"
-    ej_06_mensaje_02 DB 13,10,"ES UN PALINDROMO $"
-    ej_06_mensaje_03 DB "NO ES UN PALINDROMO $"
+    ej_06_mensaje_01 DB "CADENA 1 $", 13, 10, "$"
+    ej_06_mensaje_02 DB 13,10, "CADENA 2 $", 13, 10, "$"
+    ej_06_mensaje_03 DB 13,10, "LAS CADENAS EQUIVALEN A UN PALINDROMO $"
+    ej_06_mensaje_04 DB 13,10, "LAS CADENAS NO SON PALINDROMO $"
     ; variable numéricas
     ej_06_cadena_01 DB 20 dup('$')
     ej_06_cadena_02 DB 20 dup('$')
@@ -96,21 +117,22 @@
     ej_06_contador_02 DW 0
     ; ejercicio 07
     ; cadenas
-    ej_07_mensaje_01 DB "INGRESE UNA CADENA $", 13, 10, "$"
-    ej_07_mensaje_02 DB 13,10,"INGRESE OTRA CADENA $"
-    ej_07_mensaje_03 DB "LAS CADENAS SON IGUALES $"
+    ej_07_mensaje_01 DB "CADENA 1 $", 13, 10, "$"
+    ej_07_mensaje_02 DB 13,10,"CADENA 2 $"
+    ej_07_mensaje_03 DB 13,10,"LAS CADENAS SON IGUALES $"
     ej_07_mensaje_04 DB 13,10,"LAS CADENAS SON DIFERENTES $"
     ; vectores
     ej_07_cadena_01 DB 50 dup('$')
     ej_07_cadena_02 DB 50 dup('$')
     ; ejercicio 09
     ; cadenas
-    ej_09_mensaje_01 DB "ENSABLADOR, PRESIONE [ESC] PARA SALIR...", 13, 10, "$"
+    ej_09_mensaje_01 DB "'ENSAMBLADOR', PRESIONE [ESC] PARA SALIR... $"
     ej_09_mensaje_02 DB 13,10,"INGRESE UN CARÁCTER ", "$"
-    ej_09_mensaje_03 DB 13,10,"LO CONSEGUISTE, FIN DEL PROGRAMA ", "$"
+    ej_09_mensaje_03 DB 13,10,"PRESIONASTE [ESC], ES EL FIN DEL PROGRAMA ", "$"
     ; simbolos genéricos
     punto DB ".$"
-.code
+.code            
+
 ; termina el programa en ejecución
 macro mc_generico_finalizar
     ;MOV ah, 0h
@@ -118,6 +140,12 @@ macro mc_generico_finalizar
     MOV ax, 0c07h ; 0c07h espera a que el usuario presione una tecla
     INT 21h
     .exit
+endm  
+
+; espera un carácter cualquiera, se usa como pausa
+macro mc_generico_esperar
+    MOV ah, 01h ; funcion de lectura
+    INT 21h 
 endm
 
 ; limpia la pantalla
@@ -127,7 +155,8 @@ macro mc_limpiar_pantalla
     INT 10h
 endm
                               
-mc_generico_imprimir_menu macro
+mc_generico_imprimir_menu macro    
+    mc_limpiar_pantalla
     mc_generico_imprimir_mensaje menu_cadena_01
     mc_generico_imprimir_mensaje menu_cadena_02
     mc_generico_imprimir_mensaje menu_cadena_03
@@ -138,8 +167,23 @@ mc_generico_imprimir_menu macro
     mc_generico_imprimir_mensaje menu_cadena_08
     mc_generico_imprimir_mensaje menu_cadena_09
     mc_generico_imprimir_mensaje menu_cadena_10
-    mc_generico_imprimir_mensaje menu_cadena_11
+    mc_generico_imprimir_mensaje menu_cadena_11    
     mc_generico_imprimir_mensaje menu_cadena_12
+endm        
+
+mc_generico_imprimir_adios macro    
+    mc_limpiar_pantalla
+    mc_generico_imprimir_mensaje menu_cadena_13
+    mc_generico_imprimir_mensaje menu_cadena_14
+    mc_generico_imprimir_mensaje menu_cadena_15
+    mc_generico_imprimir_mensaje menu_cadena_16
+    mc_generico_imprimir_mensaje menu_cadena_17
+    mc_generico_imprimir_mensaje menu_cadena_18
+    mc_generico_imprimir_mensaje menu_cadena_19
+    mc_generico_imprimir_mensaje menu_cadena_20
+    mc_generico_imprimir_mensaje menu_cadena_21
+    mc_generico_imprimir_mensaje menu_cadena_22
+    mc_generico_imprimir_mensaje menu_cadena_23
 endm
                               
 ; macro genérico para imprimir cadenas
@@ -152,15 +196,15 @@ endm
 ; macro de uso genérico para leer cadenas ingresadas por teclado
 mc_generico_leer_cadena macro parametro
     LOCAL LEER
-    MOV si, 00h ; inicializa SI que se usará como contador
+    MOV si, 00h       ; inicializa SI que se usará como contador
     LEER:
-    MOV ax, 0000 ; inicializa el contenido de AX
-    MOV ah, 01h ; funcion de lectura
-    INT 21h ; ejecuta la lectura
-    MOV parametro[si], al ; guarda el caracter leído en la posición que tiene SI
-    INC si ; incrementa el contador
-    CMP al, 0dh ; revisa que no se ha presionado ENTER
-    JNE LEER ; si no es igual continúa leyendo
+        MOV ax, 0000 ; inicializa el contenido de AX
+        MOV ah, 01h ; funcion de lectura
+        INT 21h ; ejecuta la lectura
+        MOV parametro[si], al ; guarda el caracter leído en la posición que tiene SI
+        INC si ; incrementa el contador
+        CMP al, 0dh ; revisa que no se ha presionado ENTER
+        JNE LEER ; si no es igual continúa leyendo
 endm
 
 ; imprime un valor numérico de un dígito en base decimal
@@ -210,14 +254,15 @@ macro mc_generico_contar_caracteres cadena, contador
 endm
 
 ; ejercicio 01 - imprime "hola mundo"
-macro mc_ej_01    
+macro mc_ej_01         
     mc_limpiar_pantalla
-    mc_generico_imprimir_mensaje ej_01_mensaje_01
+    mc_generico_imprimir_mensaje ej_01_mensaje_01 
+    mc_generico_esperar   
 endm
 
 ; ejercicio 02 - suma dos valores de dos dígitos
 ; aclaración: la suma de valores debe ser inferior a 99
-mc_ej_02 macro
+mc_ej_02 macro         
     mc_limpiar_pantalla
     mc_generico_imprimir_mensaje ej_02_mensaje_01
     mc_generico_leer_cifra ej_02_auxiliar_01
@@ -230,9 +275,11 @@ mc_ej_02 macro
     DIV bl
     MOV ej_02_auxiliar_01, al
     MOV ej_02_auxiliar_02, ah
-    mc_generico_imprimir_mensaje ej_02_mensaje_03 ; imprime mensaje de resultado
+    mc_generico_imprimir_mensaje ej_02_mensaje_03
+    mc_generico_imprimir_mensaje ej_02_mensaje_04        ; imprime mensaje de resultado
     mc_generico_imprimir_digito ej_02_auxiliar_01
     mc_generico_imprimir_digito ej_02_auxiliar_02
+    mc_generico_esperar
 endm
 
 ; ejercicio 03 - resta dos valores de dos dígitos
@@ -249,10 +296,12 @@ mc_ej_03 macro
     MOV bl, 10
     DIV bl
     MOV ej_03_auxiliar_01, al
-    MOV ej_03_auxiliar_02, ah
-    mc_generico_imprimir_mensaje ej_02_mensaje_03 ; imprime mensaje de resultado
+    MOV ej_03_auxiliar_02, ah       
+    mc_generico_imprimir_mensaje ej_03_mensaje_01
+    mc_generico_imprimir_mensaje ej_02_mensaje_04       
     mc_generico_imprimir_digito ej_03_auxiliar_01
     mc_generico_imprimir_digito ej_03_auxiliar_02
+    mc_generico_esperar
 endm
 
 ; ejercicio 04 - multiplica dos valores de dos dígitos
@@ -271,14 +320,18 @@ mc_ej_04 macro
     MOV bl, 10
     DIV bl
     MOV ej_04_auxiliar_01, al
-    MOV ej_04_auxiliar_02, ah
-    mc_generico_imprimir_mensaje ej_02_mensaje_03 ; imprime mensaje de resultado
+    MOV ej_04_auxiliar_02, ah                    
+    mc_generico_imprimir_mensaje ej_04_mensaje_01
+    mc_generico_imprimir_mensaje ej_02_mensaje_04       
     mc_generico_imprimir_digito ej_04_auxiliar_01
     mc_generico_imprimir_digito ej_04_auxiliar_02
-    endm
-    ; ejercicio 05 - divide dos valores de dos dígitos
-    ; aclaración: imprime el punto decimal
-    macro mc_ej_05
+    mc_generico_esperar
+endm
+
+; ejercicio 05 - divide dos valores de dos dígitos
+; aclaración: imprime el punto decimal
+macro mc_ej_05         
+    mc_limpiar_pantalla
     mc_generico_imprimir_mensaje ej_02_mensaje_01
     mc_generico_leer_cifra ej_05_auxiliar_01
     mc_generico_imprimir_mensaje ej_02_mensaje_02
@@ -288,28 +341,28 @@ mc_ej_04 macro
     MOV bl, ej_05_auxiliar_02
     DIV bl
     MOV ej_05_auxiliar_01, al
-    MOV ej_05_auxiliar_02, ah
-    mc_generico_imprimir_mensaje ej_02_mensaje_03 ; imprime mensaje de resultado
+    MOV ej_05_auxiliar_02, ah         
+    mc_generico_imprimir_mensaje ej_05_mensaje_01
+    mc_generico_imprimir_mensaje ej_02_mensaje_04       
     mc_generico_imprimir_digito ej_05_auxiliar_01
     mc_generico_imprimir_mensaje punto
     mc_generico_imprimir_digito ej_05_auxiliar_02
+    mc_generico_esperar
 endm
 
 ; ejercicio 06 - verifica si dos cadenas ingresadas son palíndromos
 ; aclaración: solo acepta palabras de 20 caractéres como máximo
-macro mc_ej_06
-    LOCAL RECORRER, CONTINUAR, SI_ES, NO_ES
+macro mc_ej_06         
+    mc_limpiar_pantalla
+    LOCAL RECORRER, CONTINUAR, SI_ES, NO_ES, FINALIZAR
     MOV ej_06_cadena_01, 2EH
     MOV ej_06_cadena_02, 2EH
-    mc_limpiar_pantalla
     mc_generico_imprimir_mensaje ej_06_mensaje_01
     mc_generico_leer_cadena ej_06_cadena_01
-    mc_limpiar_pantalla
-    mc_generico_imprimir_mensaje ej_06_mensaje_01
+    mc_generico_imprimir_mensaje ej_06_mensaje_02
     mc_generico_leer_cadena ej_06_cadena_02
     mc_generico_contar_caracteres ej_06_cadena_01, ej_06_contador_01
     mc_generico_contar_caracteres ej_06_cadena_02, ej_06_contador_02
-    mc_limpiar_pantalla
     MOV ax, ej_06_contador_01
     MOV bx, ej_06_contador_02
     CMP ax, bx
@@ -318,28 +371,29 @@ macro mc_ej_06
     MOV di, ej_06_contador_01
     dec di
     RECORRER:
-    CMP di, 0
-    JAE CONTINUAR
-    JB SI_ES
+        CMP di, 0
+        JAE CONTINUAR
+        JB SI_ES
     CONTINUAR:
-    MOV al, ej_06_cadena_01[si]
-    CMP al, ej_06_cadena_02[di]
-    JNE NO_ES
-    DEC di
-    INC si
-    JE RECORRER
+        MOV al, ej_06_cadena_01[si]
+        CMP al, ej_06_cadena_02[di]
+        JNE NO_ES
+        DEC di
+        INC si
+        JE RECORRER
     SI_ES:
-    mov bl, 1
-    mc_generico_imprimir_mensaje ej_06_mensaje_02
-    .exit
+        mc_generico_imprimir_mensaje ej_06_mensaje_03
+        JMP FINALIZAR
     NO_ES:
-    mov bl, 0
-    mc_generico_imprimir_mensaje ej_06_mensaje_03
-    .exit
+        mc_generico_imprimir_mensaje ej_06_mensaje_04              
+    
+    FINALIZAR:
+        mc_generico_esperar
 endm
 
 ; ejercicio 07 - compara dos cadenas que ingresan por teclado e informa si son iguales o diferentes
-macro mc_ej_07
+macro mc_ej_07         
+
     mc_limpiar_pantalla
     mc_generico_imprimir_mensaje ej_07_mensaje_01
     mc_generico_leer_cadena ej_07_cadena_01
@@ -347,25 +401,28 @@ macro mc_ej_07
     mc_generico_leer_cadena ej_07_cadena_02
     MOV si, 00h ; inicializa SI que se usará como contador para recorrer las cadenas
     REVISAR:
-    MOV al, ej_07_cadena_01[si]
-    CMP ej_07_cadena_02[si], al
-    JE SEGUIR
-    JNE PARAR
+        MOV al, ej_07_cadena_01[si]
+        CMP ej_07_cadena_02[si], al
+        JE SEGUIR
+        JNE PARAR
     SEGUIR:
-    CMP al, "$"
-    JE IGUALES
-    JNE NO_EOL
+        CMP al, "$"
+        JE IGUALES
+        JNE NO_EOL
     PARAR:
-    JMP DIFERENTES
+        JMP DIFERENTES
     NO_EOL:
-    INC si
-    JMP REVISAR
+        INC si
+        JMP REVISAR
     IGUALES:
-    mc_generico_imprimir_mensaje ej_07_mensaje_03
-    .exit
+        mc_generico_imprimir_mensaje ej_07_mensaje_03
+        JMP FINALIZAR
+        
     DIFERENTES:
-    mc_generico_imprimir_mensaje ej_07_mensaje_04
-    .exit
+        mc_generico_imprimir_mensaje ej_07_mensaje_04
+
+    FINALIZAR:
+        mc_generico_esperar
 endm
 
 ; ejercicio 09 - lee carácteres hasta que se presione la tecla ESC
@@ -374,21 +431,23 @@ macro mc_ej_09
     mc_limpiar_pantalla
     mc_generico_imprimir_mensaje ej_09_mensaje_01
     CICLO:
-    mc_generico_imprimir_mensaje ej_09_mensaje_02
-    MOV al, 0H ; pongo un vacío en AL
-    MOV ah, 01H ; funcion de lectura, lo leido se almacena en ah
-    INT 21h ; ejecuta la función de lectura
-    CMP AL, 1BH ; valor de ESC en HEX
-    JNE SEGUIR
-    JE PARAR
+        mc_generico_imprimir_mensaje ej_09_mensaje_02
+        MOV al, 0H ; pongo un vacío en AL
+        MOV ah, 01H ; funcion de lectura, lo leido se almacena en ah
+        INT 21h ; ejecuta la función de lectura
+        CMP AL, 1BH ; valor de ESC en HEX
+        JNE SEGUIR
+        JE PARAR
     SEGUIR:
-    JMP CICLO ; para decrementar en 1 se usa DEC
+        JMP CICLO     
     PARAR:
-    mc_generico_imprimir_mensaje ej_09_mensaje_03
+        mc_generico_imprimir_mensaje ej_09_mensaje_03
+    mc_generico_esperar
 endm
+
+; main 
 .startup
-    LOOP_MENU: 
-        mc_limpiar_pantalla
+    LOOP_MENU:      
         mc_generico_imprimir_menu
         mov ah, 01h
         int 21h
@@ -421,17 +480,18 @@ endm
         JE LBL_EJ_09
         
         CMP al, "J"
-        JE LBL_EJ_11
+        JE LBL_EJ_10
         
         CMP al, "K"
         JE LBL_EJ_11
         
         CMP al, "X"
         JE LBL_EJ_00
-        JNE SEGUIR
+        
+        JMP LBL_SEGUIR
         
         LBL_EJ_01:
-            mc_ej_01
+            mc_ej_01       
             JMP LOOP_MENU
                          
         LBL_EJ_02:
@@ -443,7 +503,7 @@ endm
             JMP LOOP_MENU
             
         LBL_EJ_04:
-            ;mc_ej_04
+            mc_ej_04
             JMP LOOP_MENU
             
         LBL_EJ_05:
@@ -474,7 +534,8 @@ endm
             ;mc_ej_11
             JMP LOOP_MENU
         
-        LBL_EJ_00:
+        LBL_EJ_00:  
+            mc_generico_imprimir_adios
             mc_generico_finalizar
          
         LBL_SEGUIR:
