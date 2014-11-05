@@ -80,28 +80,28 @@
     ej_01_mensaje_01 DB "¡HOLA MUNDO!", 13, 10, "$"
     ; ejercicio 02
     ; cadenas
-    ej_02_mensaje_01 DB       "VALOR 1 (12)    $"
-    ej_02_mensaje_02 DB 13,10,"VALOR 2 (34)    $"
-    ej_02_mensaje_03 DB 13,10,"             + ____$"
-    ej_02_mensaje_04 DB 13,10,"TOTAL           $"
+    ej_02_mensaje_01 DB       "VALOR 1 (12)   $"
+    ej_02_mensaje_02 DB 13,10,"VALOR 2 (34)   $"
+    ej_02_mensaje_03 DB 13,10,"             +____$"
+    ej_02_mensaje_04 DB 13,10,"TOTAL          $"
     ; variable numéricas
     ej_02_auxiliar_01 DB 0
     ej_02_auxiliar_02 DB 0
     ; ejercicio 03 
     ; cadenas 
-    ej_03_mensaje_01 DB 13,10,"             - ____$"
+    ej_03_mensaje_01 DB 13,10,"             -____$"
     ; variables numéricas
     ej_03_auxiliar_01 DB 0
     ej_03_auxiliar_02 DB 0
     ; ejercicio 04        
     ; cadenas 
-    ej_04_mensaje_01 DB 13,10,"             x ____$"
+    ej_04_mensaje_01 DB 13,10,"             x____$"
     ; variables numéricas
     ej_04_auxiliar_01 DB 0
     ej_04_auxiliar_02 DB 0
     ; ejercicio 05
     ; cadenas 
-    ej_05_mensaje_01 DB 13,10,"             ÷ ____$"
+    ej_05_mensaje_01 DB 13,10,"             ÷_____$"
     ; variable numéricas
     ej_05_auxiliar_01 DB 0
     ej_05_auxiliar_02 DB 0
@@ -119,8 +119,8 @@
     ; cadenas
     ej_07_mensaje_01 DB "CADENA 1 $", 13, 10, "$"
     ej_07_mensaje_02 DB 13,10,"CADENA 2 $"
-    ej_07_mensaje_03 DB 13,10,"LAS CADENAS SON IGUALES $"
-    ej_07_mensaje_04 DB 13,10,"LAS CADENAS SON DIFERENTES $"
+    ej_07_mensaje_03 DB 13,10,"SON CADENAS IGUALES $"
+    ej_07_mensaje_04 DB 13,10,"SON CADENAS DIFERENTES $"
     ; vectores
     ej_07_cadena_01 DB 50 dup('$')
     ej_07_cadena_02 DB 50 dup('$')
@@ -129,8 +129,28 @@
     ej_09_mensaje_01 DB "'ENSAMBLADOR', PRESIONE [ESC] PARA SALIR... $"
     ej_09_mensaje_02 DB 13,10,"INGRESE UN CARÁCTER ", "$"
     ej_09_mensaje_03 DB 13,10,"PRESIONASTE [ESC], ES EL FIN DEL PROGRAMA ", "$"
+    
+    ; ejercicio 10
+    ; cadenas
+    ej_10_mensaje_01 DB "SE LEERAN VALORES (MAX. 10) HASTA PRESIONAR [ENTER] $"
+    ej_10_mensaje_02 DB 13,10,"INGRESE UN VALOR ENTRE 0-9: $"
+    ej_10_mensaje_03 DB "ORDENANDO ARREGLO, ESTO TOMARÁ UNOS SEGUNDOS... $"
+    ej_10_mensaje_04 DB 13,10,"ARREGLO  DESORDENADO:$"
+    ej_10_mensaje_05 DB 13,10,"ARREGLO ORDENADO 0-9:$"
+    ; vector
+    ej_10_vector DB 11 dup ("$")
+    ; variables numéricas
+    ej_10_contador DW 0
+     
+    ; ejercicio 11
+    ; cadenas
+    ej_11_mensaje_01 DB 13,10,"ARREGLO ORDENADO 0-9:$"
+     
     ; simbolos genéricos
-    punto DB ".$"
+    punto DB ".$"     
+    barra DB "  $"  
+    nuevalinea DB 13,10,"$"
+ 
 .code            
 
 ; termina el programa en ejecución
@@ -215,6 +235,27 @@ mc_generico_imprimir_digito macro parametro
     INT 21h ; ejecuta la funcion anterior
 endm
 
+; macro para imprimir un arreglo de valores numéricos
+mc_imprimir_arreglo macro parametro
+    LOCAL CICLO, FINAL, IMPRIMIR
+    MOV si, 00
+    
+    CICLO:
+        MOV al, parametro[si]
+        CMP al, "$"
+        JNE IMPRIMIR
+        JE  FINAL
+     
+    IMPRIMIR:      
+        mc_generico_imprimir_mensaje barra
+        mc_generico_imprimir_digito parametro[si]
+        INC si
+        JMP CICLO
+        
+    FINAL: 
+        mc_generico_imprimir_mensaje nuevalinea
+endm
+
 ; macro para saber la longitud de una cadena
 macro mc_generico_contar_caracteres cadena, contador
     LOCAL CONTAR, PARAR, SEGUIR
@@ -252,7 +293,21 @@ macro mc_generico_contar_caracteres cadena, contador
     ADD al, parametro
     MOV parametro, al
 endm
-
+          
+macro mc_inicializar_arreglo 
+    MOV ej_10_vector[0], "$"    
+    MOV ej_10_vector[1], "$"    
+    MOV ej_10_vector[2], "$"    
+    MOV ej_10_vector[3], "$"    
+    MOV ej_10_vector[4], "$"    
+    MOV ej_10_vector[5], "$"    
+    MOV ej_10_vector[6], "$"    
+    MOV ej_10_vector[7], "$"    
+    MOV ej_10_vector[8], "$"    
+    MOV ej_10_vector[9], "$"       
+    MOV ej_10_vector[0ah], "$"       
+endm
+                  
 ; ejercicio 01 - imprime "hola mundo"
 macro mc_ej_01         
     mc_limpiar_pantalla
@@ -443,6 +498,75 @@ macro mc_ej_09
     PARAR:
         mc_generico_imprimir_mensaje ej_09_mensaje_03
     mc_generico_esperar
+endm      
+
+; ejercicio 10 - captura y ordena un arreglo de máximo 10 valores numéricos
+macro mc_ej_10  
+    LOCAL LECTURA, REVISAR_INFERIOR, REVISAR_SUPERIOR, FIN_LECTURA, CICLO_INTERNO, CICLO_EXTERNO, INTERCAMBIAR, EVALUAR, FIN
+    mc_limpiar_pantalla
+    mc_generico_imprimir_mensaje ej_10_mensaje_01
+    mc_inicializar_arreglo
+    MOV si, 00
+    LECTURA:
+        CMP si, 9
+        JA  FIN_LECTURA
+        mc_generico_imprimir_mensaje ej_10_mensaje_02
+        MOV ax, 0000 
+        MOV ah, 01h 
+        INT 21h    
+        MOV bl, al 
+        SUB al, 30h
+        MOV ej_10_vector[si], al  
+        INC si 
+        CMP bl, 0dh        
+        JE  FIN_LECTURA     
+        JNE LECTURA
+ 
+    FIN_LECTURA: 
+       mc_limpiar_pantalla
+       mc_generico_imprimir_mensaje ej_10_mensaje_03
+       mc_generico_imprimir_mensaje ej_10_mensaje_04
+       mc_imprimir_arreglo ej_10_vector
+    
+    mc_generico_contar_caracteres ej_10_vector, ej_10_contador
+    INC ej_10_contador
+    
+    CICLO_EXTERNO:
+        MOV si, 00
+        MOV di, 01
+        DEC ej_10_contador
+        CMP ej_10_contador, 0
+        JA  CICLO_INTERNO
+        JMP FIN
+        
+        CICLO_INTERNO:  
+            MOV al, ej_10_vector[si]
+            CMP al, ej_10_vector[di]
+            JA  INTERCAMBIAR
+            JMP EVALUAR
+            
+        INTERCAMBIAR:      
+            MOV al, ej_10_vector[si]
+            MOV bl, ej_10_vector[di]
+            MOV ej_10_vector[di], al
+            MOV ej_10_vector[si], bl
+            JMP EVALUAR 
+        
+        EVALUAR:                  
+            CMP si, ej_10_contador
+            INC di
+            INC si
+            JA  CICLO_EXTERNO
+            JMP CICLO_INTERNO             
+
+    FIN:       
+        mc_generico_imprimir_mensaje ej_10_mensaje_05
+        mc_imprimir_arreglo ej_10_vector          
+endm 
+
+; ejercicio 11 - captura y ordena un arreglo de máximo 10 valores numéricos
+macro mc_ej_11                                  
+    
 endm
 
 ; main 
@@ -527,7 +651,7 @@ endm
             JMP LOOP_MENU
             
         LBL_EJ_10:
-            ;mc_ej_10
+            mc_ej_10
             JMP LOOP_MENU
             
         LBL_EJ_11:
@@ -540,5 +664,4 @@ endm
          
         LBL_SEGUIR:
             JMP LOOP_MENU   
-    
 end
