@@ -132,6 +132,20 @@
     ; vectores
     ej_07_cadena_01 DB 50 dup('$')
     ej_07_cadena_02 DB 50 dup('$')
+    
+    ; ejercicio 08
+    ; cadenas
+    ej_08_mensaje_01 DB "INGRESE UNA CADENA $", 13,10, "$"
+    ej_08_mensaje_02 DB 13,10,"INGRESE LA SUBCADENA $"
+    ej_08_mensaje_03 DB 13,10,"LA SUBCADENA FUE ENCONTRADA $"
+    ej_08_mensaje_04 DB 13,10,"LA SUBCADENA NO FUE ENCONTRADA $"
+    ; vectores
+    ej_08_cadena_01 DB 50 dup('$')
+    ej_08_subcadena_01 DB 50 dup('$')
+    ; variables numéricas
+    ej_08_longitud_cadena DW 0
+    ej_08_longitud_subcadena  DW 0
+    
     ; ejercicio 09
     ; cadenas
     ej_09_mensaje_01 DB "'ENSAMBLADOR', PRESIONE [ESC] PARA SALIR... $"
@@ -165,7 +179,7 @@
     ; simbolos genéricos
     punto DB ".$"     
     barra DB "  $"  
-    nuevalinea DB 13,10,"$"
+    nuevalinea DB 13,10,"$"     
      
 .code            
 
@@ -535,69 +549,115 @@ macro mc_ej_07
         mc_generico_esperar
 endm
 
+; ejercicio 08 - busca una subcadena dentro de una cadena
+macro mc_ej_08
+    LOCAL CICLO_EXTERNO, CICLO_INTERNO, SEGUIR, SI_ESTA, NO_ESTA, PARAR
+    mc_limpiar_pantalla                         
+    mc_generico_imprimir_mensaje ej_08_mensaje_01     
+    mc_generico_leer_cadena ej_08_cadena_01
+    mc_generico_imprimir_mensaje ej_08_mensaje_02
+    mc_generico_leer_cadena ej_08_subcadena_01
+    
+    mc_generico_contar_caracteres ej_08_cadena_01, ej_08_longitud_cadena
+    mc_generico_contar_caracteres ej_08_subcadena_01, ej_08_longitud_subcadena
+
+    MOV di, 00h 
+    MOV si, 00h
+    CICLO_EXTERNO:    
+        CMP si, ej_08_longitud_cadena 
+        JA  NO_ESTA
+        JBE SEGUIR
+        
+    SEGUIR:  
+        MOV al, ej_08_cadena_01[si] 
+        CMP al, ej_08_subcadena_01[di] 
+        JE CICLO_INTERNO
+        INC si         
+        MOV di, 00h
+        JNE CICLO_EXTERNO    
+    
+        CICLO_INTERNO: 
+            INC di
+            CMP di, ej_08_longitud_subcadena
+            JE SI_ESTA
+            INC si    
+            JNE SEGUIR    
+    SI_ESTA:
+        mc_generico_imprimir_mensaje ej_08_mensaje_03
+        JMP PARAR
+
+    NO_ESTA:
+        mc_generico_imprimir_mensaje ej_08_mensaje_04    
+        
+    PARAR: 
+        mc_generico_esperar
+endm
+
 ; ejercicio 09 - lee carácteres hasta que se presione la tecla ESC
 macro mc_ej_09  
     LOCAL CICLO, PARAR, SEGUIR
     mc_limpiar_pantalla
-    mc_generico_imprimir_mensaje ej_09_mensaje_01
-    CICLO:
-        mc_generico_imprimir_mensaje ej_09_mensaje_02
-        MOV al, 0H ; pongo un vacío en AL
-        MOV ah, 01H ; funcion de lectura, lo leido se almacena en ah
-        INT 21h ; ejecuta la función de lectura
-        CMP AL, 1BH ; valor de ESC en HEX
-        JNE SEGUIR
-        JE PARAR
+    mc_generico_imprimir_mensaje ej_09_mensaje_01           ; imprime un mensaje informativo
+    CICLO:                                                  ; crea una etiqueta donde se ejecutará una condición que actúa como un ciclo "FOR"
+        mc_generico_imprimir_mensaje ej_09_mensaje_02       ; 
+        MOV al, 0H                                          ; pongo un vacío en AL
+        MOV ah, 01H                                         ; funcion de lectura, lo leido se almacena en ah
+        INT 21h                                             ; ejecuta la función de lectura
+        CMP AL, 1BH                                         ; valor de ESC en HEX
+        JNE SEGUIR                                          ; JNE = si la condición no igual al carácter ESC, salta a la etiqueta "PARAR"
+        JE PARAR                                            ; JE  = si la condición es igual a ESC entonces salte a la etiqueta que detiene el ciclo
     SEGUIR:
-        JMP CICLO     
+        JMP CICLO                                           ; salta a la etiqueta "CICLO" para seguir ejecutando el programa, sigue pidiendo otro carácter en pantalla
     PARAR:
-        mc_generico_imprimir_mensaje ej_09_mensaje_03
-        mc_generico_esperar
+        mc_generico_imprimir_mensaje ej_09_mensaje_03       ; imprime un mensaje informativo de que se presionó ESC y se detuvo el ciclo 
+        mc_generico_esperar                                 ; hace una pausa, espera a que el usuario presione una tecla 
 endm      
 
 ; ejercicio 10 - captura y ordena un arreglo de máximo 10 valores numéricos
+; usa el médtodo de ordenamiento de burbuja
 macro mc_ej_10  
     LOCAL LECTURA, FIN_LECTURA, CICLO_INTERNO, CICLO_EXTERNO, INTERCAMBIAR, EVALUAR, FIN
-    mc_limpiar_pantalla
-    mc_generico_imprimir_mensaje ej_10_mensaje_01
-    mc_inicializar_arreglo ej_11_vector
-    mc_generico_llenar_arreglo ej_10_vector, ej_10_mensaje_02, ej_10_mensaje_03, ej_10_mensaje_04
-    mc_generico_contar_caracteres ej_10_vector, ej_10_contador
-    INC ej_10_contador
+    mc_limpiar_pantalla                                     
+    mc_generico_imprimir_mensaje ej_10_mensaje_01           ; mensaje informativo para solicitar una arreglo al usuario
+    mc_inicializar_arreglo ej_11_vector                     ; inicializa el vector
+    mc_generico_llenar_arreglo ej_10_vector, ej_10_mensaje_02, ej_10_mensaje_03, ej_10_mensaje_04 ; llama al macro de llenado de vectores, es un ciclo que pide 10 valores
+    mc_generico_contar_caracteres ej_10_vector, ej_10_contador ; se invoca al macro que retorna la longitud de un array o cadena de carácteres
+    INC ej_10_contador                                      ; incrementa el contador en 1, (fin práctico)
     CICLO_EXTERNO:
-        MOV si, 00
-        MOV di, 01           
-        DEC ej_10_contador
-        CMP ej_10_contador, 0
-        JA  CICLO_INTERNO
-        JMP FIN
+        MOV si, 00                                          ; inicializa el contador SI
+        MOV di, 01                                          ; inicializa el contador DI, para recorrer vectores se usa SIEMPRE SI o DI
+        DEC ej_10_contador                                  ; decrementa el contador en 1, esto se hace porque en cada recorrido se recorta la longitud del vector 
+        CMP ej_10_contador, 0                               ; compara el valor actual del contador para saber si es igual a 0
+        JA  CICLO_INTERNO                                   ; salta a la etiqueta del ciclo interno
+        JMP FIN                                             ; salta a la etiqueta que termina el ciclo
         
-        CICLO_INTERNO:             
-            MOV al, ej_10_vector[si]
-            CMP al, ej_10_vector[di]
-            JA INTERCAMBIAR
-            JBE  EVALUAR
+        CICLO_INTERNO:                                      ; el ciclo interno hace la funcion de ir desplazando el valor mayor al final del vector
+            MOV al, ej_10_vector[si]                        ; mueve al registro AL el valor del vector en la posición SI (ej: 5)
+            CMP al, ej_10_vector[di]                        ; revisa que el valor de la posición actual sea mayor que la posición siguiente 
+            JA INTERCAMBIAR                                 ; si el actual es mayor al posterior entonces se hace un intercambio
+            JBE  EVALUAR                                    ; revisa algunas condiciones para seguir ejecutando el ciclo
             
         INTERCAMBIAR:      
-            MOV al, ej_10_vector[si]
-            MOV bl, ej_10_vector[di]
-            MOV ej_10_vector[di], al
-            MOV ej_10_vector[si], bl
+            MOV al, ej_10_vector[si]                        ; mueva AL el valor de SI
+            MOV bl, ej_10_vector[di]                        ; mueve BL el valor de DI
+            MOV ej_10_vector[di], al                        ; asigna a la posición DI el contenido de AL
+            MOV ej_10_vector[si], bl                        ; asigna a la posición SI el contenido de BL
             JMP EVALUAR
         
         EVALUAR:                  
-            CMP di, ej_10_contador
-            JAE  CICLO_EXTERNO
-            INC di
-            INC si
-            JMP CICLO_INTERNO
+            CMP di, ej_10_contador                          ; revisa que el valor posterior no supere la longitud del vector
+            JAE  CICLO_EXTERNO                              ; si DI es mayor o igual a el valor de contador salta al CICLO_EXTERNO
+            INC di                                          ; incrementa el contador DI
+            INC si                                          ; incrementa el contador SI
+            JMP CICLO_INTERNO                               ; vuelve a evaluar las condiciones para saber si hay que realizar un nuevo intercambio
     FIN:
-        mc_generico_imprimir_mensaje ej_10_mensaje_05       
-        mc_imprimir_arreglo ej_10_vector  
+        mc_generico_imprimir_mensaje ej_10_mensaje_05       ; imprime mensajes informativos usando un macro
+        mc_imprimir_arreglo ej_10_vector                    ; imprime el vector ordenado
         mc_generico_esperar
 endm
     
-; ejercicio 11 - captura y ordena un arreglo de máximo 10 valores numéricos
+; ejercicio 11 - captura y ordena un arreglo de máximo 10 valores numéricos  
+; ordena un vector de mayor a menor mediante el algoritmo de ordenamiento burbuja
 macro mc_ej_11
     LOCAL CICLO_INTERNO, CICLO_EXTERNO, INTERCAMBIAR, EVALUAR, FIN
     mc_limpiar_pantalla
@@ -617,9 +677,9 @@ macro mc_ej_11
         CICLO_INTERNO:             
             MOV al, ej_11_vector[si]
             CMP al, ej_11_vector[di]
-            JAE EVALUAR
-            JB  INTERCAMBIAR
-            
+            JAE EVALUAR                                     ; el algoritmo es igual al del ejercicio 10, solo modifica esta condición
+            JB  INTERCAMBIAR                                ; se invirte la condición de intercambio 
+                                                            ; en este caso se desplazan al final del vector los valores menores y se acorta en 1 la longitud del vector
         INTERCAMBIAR:      
             MOV al, ej_11_vector[si]
             MOV bl, ej_11_vector[di]
@@ -717,7 +777,7 @@ endm
             JMP LOOP_MENU
         
         LBL_EJ_08:
-            ;mc_ej_08
+            mc_ej_08
             JMP LOOP_MENU
             
         LBL_EJ_09:
@@ -729,7 +789,7 @@ endm
             JMP LOOP_MENU
             
         LBL_EJ_11:
-        ;    mc_ej_11
+            mc_ej_11
             JMP LOOP_MENU
         
         LBL_EJ_00:  
