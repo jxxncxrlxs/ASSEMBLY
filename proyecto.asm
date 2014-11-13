@@ -59,7 +59,7 @@
 ; de este modo se identifican las variables y constantes utilizadas en cada ejercicio facilitando el testing y mantenimiento del proyecto
 .data                                                                                             
     menu_cadena_01 DB "················································································",13,10,"$"
-    menu_cadena_02 DB "·                     INGENIERIA EN SISTEMAS DE INFORMACION                     ·",13,10,"$"
+    menu_cadena_02 DB "·                     INGENIERIA EN SISTEMAS DE INFORMACION                    ·",13,10,"$"
     menu_cadena_03 DB "·                            III CUATRIMESTRE 2014                             ·",13,10,"$"
     menu_cadena_04 DB "·                         ORGANIZACION DE ESTRUCTURAS                          ·",13,10,"$"
     menu_cadena_05 DB "·                                PROGRAMADORES                                 ·",13,10,"$"
