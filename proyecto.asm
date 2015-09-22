@@ -60,7 +60,6 @@
     menu_cadena_03 DB "·                            III CUATRIMESTRE 2014                             ·",13,10,"$"
     menu_cadena_04 DB "·                         ORGANIZACION DE ESTRUCTURAS                          ·",13,10,"$"
     menu_cadena_05 DB "·                                PROGRAMADORES                                 ·",13,10,"$"
-    menu_cadena_06 DB "·KAREN SALAS - JOSEPH MORALES - JAIRO PICADO - GUILLERMO BRENES - JUAN SANCHEZ ·",13,10,"$"
     menu_cadena_07 DB "················································································",13,10,"$"
     menu_cadena_08 DB "· [A] HOLA MUNDO     [B] SUMA            [C] RESTA          [D] MULTIPLICACION ·",13,10,"$"
     menu_cadena_09 DB "· [E] DIVISION       [F] PALINDROMO      [G] CADENA IGUAL   [H] SUBCADENA      ·",13,10,"$"
